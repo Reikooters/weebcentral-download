@@ -32,7 +32,11 @@ The above project contains a lot more features and configuration. I created this
 
 # Building
 
-I'm personally using JetBrains CLion 2025.2.4 on Arch Linux, which just requires opening the project folder and clicking the build icon in the top right.
+I'm personally using JetBrains CLion 2025.2.4 on Arch Linux, which just requires opening the project folder and clicking the build icon in the top right, using the bundled compiler.
+
+I have also successfully compiled the application with JetBrains CLion 2025.2.4 on Windows 11 using the bundled compiler as well.
+
+Both binaries from the above are provided on the Releases page.
 
 Below instructions are AI generated using Claude 4.5 Sonnet for anyone else.
 
