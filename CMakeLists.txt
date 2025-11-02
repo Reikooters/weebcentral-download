@@ -59,7 +59,15 @@ if(USE_FETCHCONTENT_CURL)
     set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
     set(CURL_DISABLE_TESTS ON CACHE BOOL "" FORCE)
     set(HTTP_ONLY ON CACHE BOOL "" FORCE)  # Only HTTP/HTTPS support, reduces dependencies
-    set(CURL_USE_OPENSSL ON CACHE BOOL "" FORCE)
+    set(CURL_USE_LIBPSL OFF CACHE BOOL "" FORCE)  # Disable libpsl dependency
+
+    # Use Schannel on Windows, OpenSSL on other platforms
+    if(WIN32)
+        set(CURL_USE_SCHANNEL ON CACHE BOOL "" FORCE)
+        set(CURL_USE_OPENSSL OFF CACHE BOOL "" FORCE)
+    else()
+        set(CURL_USE_OPENSSL ON CACHE BOOL "" FORCE)
+    endif()
 
     # Make available with error checking
     FetchContent_MakeAvailable(curl)
@@ -84,6 +92,11 @@ add_executable(weebcentral-download
         HttpClient.h
         models/Chapter.h
 )
+
+# Add static linking flags for Windows + MinGW
+if(WIN32 AND MINGW)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ -static")
+endif()
 
 # Link lexbor to executable
 target_link_libraries(weebcentral-download PRIVATE lexbor_static)
