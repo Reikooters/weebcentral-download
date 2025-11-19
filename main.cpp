@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 
     for (size_t i = 0; i < chapters_count; ++i) {
         const auto& chapter = chapters[i];
-        std::cout << "  " << chapter.name << " -> " << chapter.url << std::endl;
+        std::cout << "  [" << (i + 1) << "/" << chapters_count << "] " << chapter.name << " -> " << chapter.url << std::endl;
 
         std::filesystem::path chapter_folder = manga_folder / Utils::sanitizeFolderName(chapter.name);
 
@@ -120,11 +120,14 @@ int main(int argc, char *argv[]) {
         std::vector<std::string> image_uris = getChapterImageURIs(http_client, chapter.url);
 
         if (image_uris.empty()) {
-            std::cerr << "Error: Could not get image URIs for chapter: " << chapter.name << std::endl;
+            std::cerr << "    Error: Could not get image URIs for chapter: " << chapter.name << std::endl;
             return 1;
         }
 
-        for (const auto &image_uri: image_uris) {
+        const std::size_t image_uris_count = image_uris.size();
+
+        for (size_t j = 0; j < image_uris_count; ++j) {
+            const std::string &image_uri = image_uris[j];
             std::string image_filename = std::filesystem::path(image_uri).filename().string();
 
             size_t queryPos = image_filename.find('?');
@@ -138,7 +141,7 @@ int main(int argc, char *argv[]) {
 
             http_client.download_image(image_uri, image_path_string);
 
-            std::cout << "    " << image_uri << " -> " << image_path_string << std::endl;
+            std::cout << "    [" << (j + 1) << "/" << image_uris_count << "] " << image_uri << " -> " << image_path_string << std::endl;
         }
 
         if (i < chapters_count - 1) {
@@ -161,7 +164,7 @@ std::string getMangaTitle(HttpClient &http_client, const std::string &manga_uri)
         return {};
     }
 
-    std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
+    // std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
 
     // Parse HTML with lexbor
     lxb_html_document_t *document = lxb_html_document_create();
@@ -223,7 +226,7 @@ std::vector<Chapter> getChapters(HttpClient &http_client, const std::string &ser
         return {};
     }
 
-    std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
+    // std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
 
     // Parse chapter list HTML
     lxb_html_document_t *document = lxb_html_document_create();
@@ -260,7 +263,7 @@ std::vector<std::string> getChapterImageURIs(HttpClient &http_client, const std:
         return {};
     }
 
-    std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
+    // std::cout << "Downloaded " << html_content.size() << " bytes" << std::endl;
 
     // Parse chapter images list HTML
     lxb_html_document_t *document = lxb_html_document_create();
