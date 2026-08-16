@@ -224,7 +224,7 @@ std::vector<Chapter> Utils::parseChapterList(lxb_html_document_t *document) {
             std::string href_str = reinterpret_cast<const char *>(href);
 
             // Check if this is a chapter link
-            if (href_str.find("https://weebcentral.com/chapters/") != std::string::npos) {
+            if (href_str.starts_with("/chapters/")) {
                 // Get the chapter name from the text content
                 // We need to find the <span> with the chapter name
                 lxb_dom_node_t *node = lxb_dom_interface_node(elem);

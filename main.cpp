@@ -254,7 +254,7 @@ std::vector<Chapter> getChapters(HttpClient &http_client, const std::string &ser
 }
 
 std::vector<std::string> getChapterImageURIs(HttpClient &http_client, const std::string &chapter_uri) {
-    std::string images_uri = chapter_uri + "/images?is_prev=False&current_page=1&reading_style=long_strip";
+    std::string images_uri = "https://weebcentral.com" + chapter_uri + "/images?is_prev=False&current_page=1&reading_style=long_strip";
 
     // Download HTML
     std::string html_content;
